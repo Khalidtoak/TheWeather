@@ -73,7 +73,7 @@ class CurrentWeatherFragment : ScopedFragment(), KodeinAware{
         textView_condition.text = condition
     }
     private fun chooseUnitLocalized(metric:String, imperial:String): String {
-        return if (viewModel.isMetric) metric else imperial
+        return if (viewModel.isMetricUnit) metric else imperial
     }
 
     @SuppressLint("SetTextI18n")
