@@ -17,14 +17,13 @@ import khalid.com.forecastAppmvvm2.providers.UnitProviderImpl
 import khalid.com.forecastAppmvvm2.repository.ForecastRepository
 import khalid.com.forecastAppmvvm2.repository.ForecastRepositoryImpl
 import khalid.com.forecastAppmvvm2.ui.weather.current.CurrentWeatherViewModelFactory
+import khalid.com.forecastAppmvvm2.ui.weather.future.detail.FutureWeatherDetailViewModelFactory
 import khalid.com.forecastAppmvvm2.ui.weather.future.list.FutureWeatherListViewModelFactory
 import org.kodein.di.Kodein
 import org.kodein.di.KodeinAware
 import org.kodein.di.android.x.androidXModule
-import org.kodein.di.generic.bind
-import org.kodein.di.generic.instance
-import org.kodein.di.generic.provider
-import org.kodein.di.generic.singleton
+import org.kodein.di.generic.*
+import org.threeten.bp.LocalDate
 
 /**
  * Created by ${KhalidToak} on 11/20/2018.
@@ -46,6 +45,8 @@ class ForecastApplication : Application(), KodeinAware {
         bind<UnitProvider>() with singleton { UnitProviderImpl(instance()) }
         bind() from provider { CurrentWeatherViewModelFactory(instance(), instance()) }
         bind() from provider { FutureWeatherListViewModelFactory(instance(), instance()) }
+        bind() from factory { detailDate : LocalDate ->
+            FutureWeatherDetailViewModelFactory(detailDate , instance(), instance()) }
     }
 
     override fun onCreate() {

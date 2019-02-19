@@ -1,4 +1,4 @@
-package khalid.com.forecastAppmvvm2.data.db.unitLocalized.future
+package khalid.com.forecastAppmvvm2.data.db.unitLocalized.future.list
 
 import org.threeten.bp.LocalDate
 

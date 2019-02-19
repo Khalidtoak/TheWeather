@@ -6,7 +6,8 @@ import khalid.com.forecastAppmvvm2.data.db.unitLocalized.current.UnitSpecificWea
 import khalid.com.forecastAppmvvm2.data.db.WeatherDao
 import khalid.com.forecastAppmvvm2.data.db.WeatherLocationDao
 import khalid.com.forecastAppmvvm2.data.db.entity.WeatherLocation
-import khalid.com.forecastAppmvvm2.data.db.unitLocalized.future.UnitSpecificSimpleFutureWeatherEntry
+import khalid.com.forecastAppmvvm2.data.db.unitLocalized.future.details.UnitSpecificDetailFutureWeatherEntry
+import khalid.com.forecastAppmvvm2.data.db.unitLocalized.future.list.UnitSpecificSimpleFutureWeatherEntry
 import khalid.com.forecastAppmvvm2.data.response.CurrentWeatherResponse
 import khalid.com.forecastAppmvvm2.data.response.FutureWeatherResponse
 import khalid.com.forecastAppmvvm2.data.response.network.FORCAST_DAYS_COUNT
@@ -38,6 +39,16 @@ class ForecastRepositoryImpl(
         }
     }
 
+    override suspend fun getFutureWeatherByDate(
+        date: LocalDate,
+        metric: Boolean
+    ): LiveData<out UnitSpecificDetailFutureWeatherEntry> {
+        return withContext(Dispatchers.IO){
+            initWeatherData()
+            return@withContext if(metric) futureWeatherDao.getDetailedWeatherByDateMetric(date)
+            else futureWeatherDao.getDetailedWeatherByDateImperial(date)
+        }
+    }
     override suspend fun getWeatherLcation(): LiveData<WeatherLocation> {
         return withContext(Dispatchers.IO){
             return@withContext weatherLocationDao.getLocation()
@@ -70,7 +81,7 @@ class ForecastRepositoryImpl(
            val today = LocalDate.now()
            futureWeatherDao.deleteOldEntries(today)
        }
-        GlobalScope.launch {
+        GlobalScope.launch (Dispatchers.IO) {
             deleteOldEnries()
             val futureWeatherList = newFutureWeather.futureWeatherEntries.entries
             futureWeatherDao.insert(futureWeatherList)

@@ -1,4 +1,4 @@
-package khalid.com.forecastAppmvvm2.data.db.unitLocalized.future
+package khalid.com.forecastAppmvvm2.data.db.unitLocalized.future.list
 
 import androidx.room.ColumnInfo
 import org.threeten.bp.LocalDate
@@ -6,10 +6,10 @@ import org.threeten.bp.LocalDate
 /**
  * Created by ${KhalidToak} on 12/30/2018.
  */
-class ImperialSimpleFutureWeatherEntry (
+data class MetricSimpleFutureWeatherEntry (
     @ColumnInfo(name = "date")
     override val date: LocalDate,
-    @ColumnInfo(name = "avgtempF")
+    @ColumnInfo(name = "avgtempC")
     override val avgTemperature: Double,
     @ColumnInfo(name = "condition_text")
     override val conditionText: String,

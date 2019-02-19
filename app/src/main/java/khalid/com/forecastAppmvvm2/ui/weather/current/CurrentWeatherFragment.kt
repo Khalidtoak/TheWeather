@@ -42,6 +42,7 @@ class CurrentWeatherFragment : ScopedFragment(), KodeinAware{
     launch {
         val location = viewModel.weatherLocation.await()
         location.observe(this@CurrentWeatherFragment, Observer {
+            if(it == null) return@Observer
             updateLocation(it.name)
         })
         val weather = viewModel.weather.await()
