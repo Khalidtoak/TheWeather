@@ -6,19 +6,22 @@ import androidx.lifecycle.MutableLiveData
 import khalid.com.forecastAppmvvm2.data.response.CurrentWeatherResponse
 import khalid.com.forecastAppmvvm2.data.response.FutureWeatherResponse
 import khalid.com.forecastAppmvvm2.internal.NoNetworkException
+import khalid.com.forecastAppmvvm2.repository.BaseRepositry
 
 const val FORCAST_DAYS_COUNT = 7
 class WeatherNetworkDataSourceImpl(private val weatherApiService
-                                     : WeatherApiService) : WeatherNetworkDataSource {
+                                     : WeatherApiService) : WeatherNetworkDataSource, BaseRepositry() {
     private val _downloadedFutureWeather = MutableLiveData<FutureWeatherResponse>()
     override val downloadedFutureWeather: LiveData<FutureWeatherResponse>
         get() = _downloadedFutureWeather
 
     override suspend fun getFutureWeather(location: String,  languageCode: String) {
         try {
-            val fetchedFutureWeather = weatherApiService.getFutureWeather(location,
-                FORCAST_DAYS_COUNT).await()
-            _downloadedFutureWeather.postValue(fetchedFutureWeather)
+            val futureWeatherResponse = safeApiCall(
+                call = {weatherApiService.getFutureWeatherAsync(location,
+                FORCAST_DAYS_COUNT).await()},
+                errorMessage = "Error fetching weather")
+            _downloadedFutureWeather.postValue(futureWeatherResponse)
         }
         catch (e: NoNetworkException){
             Log.e("Connectivity_error", "No internet connection", e)
@@ -31,9 +34,10 @@ class WeatherNetworkDataSourceImpl(private val weatherApiService
 
     override suspend fun getCurrentWeather(location: String, languageCode: String) {
         try {
-            val fetchedCurrentWeather = weatherApiService.getCurrentWeather(location)
-                .await()
-            _dowloadedCurrentWeather.postValue(fetchedCurrentWeather)
+            val currentWeatherResponse = safeApiCall(
+                call = {weatherApiService.getCurrentWeatherAsync(location).await()},
+                errorMessage = "Error fetching weather")
+            _dowloadedCurrentWeather.postValue(currentWeatherResponse)
         }
         catch (e : NoNetworkException){
             Log.e("Connectivity_error", "No internet connection", e)

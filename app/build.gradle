@@ -78,8 +78,8 @@ dependencies {
     kapt 'com.github.bumptech.glide:compiler:4.8.0'
 
     // Groupie RecyclerView
-    implementation 'com.xwray:groupie:2.1.0'
-    implementation 'com.xwray:groupie-kotlin-android-extensions:2.1.0'
+    implementation 'com.xwray:groupie:2.3.0'
+    implementation 'com.xwray:groupie-kotlin-android-extensions:2.3.0'
 
     // Preference
     implementation "androidx.preference:preference:1.0.0"

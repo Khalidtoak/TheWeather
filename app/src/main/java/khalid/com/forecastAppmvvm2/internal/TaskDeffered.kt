@@ -7,7 +7,7 @@ import kotlinx.coroutines.Deferred
 /**
  * Created by ${KhalidToak} on 12/26/2018.
  */
-fun <T> Task<T>.asDeferred() : Deferred<T>{
+fun <T> Task<T>.asDeferredAsync() : Deferred<T>{
     val deferred = CompletableDeferred<T>()
     this.addOnSuccessListener {
         deferred.complete(it)

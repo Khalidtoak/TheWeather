@@ -19,7 +19,7 @@ import khalid.com.forecastAppmvvm2.data.db.entity.WeatherLocation
 abstract class ForecastDatabase : RoomDatabase(){
     abstract fun currentWeatherDao() : WeatherDao
     abstract fun futureWeatherDDao() : FutureWeatherDao
-    abstract  fun weatherocationDao() : WeatherLocationDao
+    abstract  fun weatherLocationDao() : WeatherLocationDao
     companion object {
         @Volatile private var instance : ForecastDatabase? = null
         private val LOCK = Any()

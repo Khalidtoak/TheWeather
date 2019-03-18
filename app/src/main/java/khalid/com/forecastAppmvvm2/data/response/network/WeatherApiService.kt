@@ -7,6 +7,7 @@ import khalid.com.forecastAppmvvm2.data.response.network.API_KEY
 import kotlinx.coroutines.Deferred
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
+import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
@@ -18,15 +19,15 @@ import retrofit2.http.Query
 const val API_KEY = "6f41967d7bf14644b01142434181211"
 interface WeatherApiService {
     @GET("current.json")
-    fun getCurrentWeather(
+    fun getCurrentWeatherAsync(
         @Query("q") location : String
-    ) : Deferred<CurrentWeatherResponse>
+    ) : Deferred<Response<CurrentWeatherResponse>>
     //https://api.apixu.com/v1/forecast.json?key=6f41967d7bf14644b01142434181211&q=Lagos&days=3
     @GET("forecast.json")
-    fun getFutureWeather(
+    fun getFutureWeatherAsync(
         @Query("q")location: String
     , @Query("days") days: Int
-    ) : Deferred<FutureWeatherResponse>
+    ) : Deferred<Response<FutureWeatherResponse>>
 
     companion object {
         operator fun invoke(connectivityInterceptor: ConnectivityInterceptor) : WeatherApiService {
@@ -40,6 +41,7 @@ interface WeatherApiService {
                     .build()
                 return@Interceptor it.proceed(request)
             }
+
             val okHttpClient = OkHttpClient.Builder().addInterceptor(requestInterceptor)
                 .addInterceptor(connectivityInterceptor)
                 .build()

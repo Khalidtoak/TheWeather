@@ -27,7 +27,7 @@ class ForecastRepositoryImpl(
     private val weatherLocationDao: WeatherLocationDao,
     private val currentWeatherNetworkDataSource: WeatherNetworkDataSource,
     private val locationProvider: LocationProvider
-    ) : ForecastRepository {
+    ) : ForecastRepository, BaseRepositry() {
     override suspend fun getFutureWeatherList(
         startDate: LocalDate,
         metric: Boolean
@@ -99,7 +99,8 @@ class ForecastRepositoryImpl(
         if (isFetchCurrentNeeded(lastWeatherLocation.zonedDateTime))
             if(isFetchFutureNeeded())
                fetchCurrentWeather()
-
+            if(isFetchFutureNeeded())
+                fetchFutureWeather()
     }
 
     private suspend fun fetchFutureWeather() {
@@ -118,7 +119,9 @@ class ForecastRepositoryImpl(
         return  lastfetchedtime.isBefore(thirtyMinutesAgo)
     }
     private suspend fun fetchCurrentWeather(){
-        currentWeatherNetworkDataSource.getCurrentWeather(locationProvider.getPreferredLocationString(), Locale.getDefault().language)
+
+        currentWeatherNetworkDataSource.getCurrentWeather(locationProvider.getPreferredLocationString(),
+            Locale.getDefault().language)
     }
     private  fun persisFetchedCurrentWeather(fetchedWeather: CurrentWeatherResponse){
         GlobalScope.launch(Dispatchers.IO) {
