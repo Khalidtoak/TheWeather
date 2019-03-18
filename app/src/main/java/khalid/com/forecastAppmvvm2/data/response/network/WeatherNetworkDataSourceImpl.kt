@@ -7,6 +7,7 @@ import khalid.com.forecastAppmvvm2.data.response.CurrentWeatherResponse
 import khalid.com.forecastAppmvvm2.data.response.FutureWeatherResponse
 import khalid.com.forecastAppmvvm2.internal.NoNetworkException
 import khalid.com.forecastAppmvvm2.repository.BaseRepositry
+import java.net.SocketTimeoutException
 
 const val FORCAST_DAYS_COUNT = 7
 class WeatherNetworkDataSourceImpl(private val weatherApiService
@@ -26,6 +27,9 @@ class WeatherNetworkDataSourceImpl(private val weatherApiService
         catch (e: NoNetworkException){
             Log.e("Connectivity_error", "No internet connection", e)
         }
+        catch (e : SocketTimeoutException){
+            Log.e("Connectivity_error", "Slow Internet Connection", e)
+        }
     }
 
     private val _dowloadedCurrentWeather = MutableLiveData<CurrentWeatherResponse>()
@@ -41,6 +45,9 @@ class WeatherNetworkDataSourceImpl(private val weatherApiService
         }
         catch (e : NoNetworkException){
             Log.e("Connectivity_error", "No internet connection", e)
+        }
+        catch (e : SocketTimeoutException){
+            Log.e("Connectivity_error", "Slow Internet Connection", e)
         }
 
     }
